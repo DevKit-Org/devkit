@@ -55,11 +55,6 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           {/* <SearchCommand /> */}
           <ThemeToggle />
-          <Link href="/admin" className="hidden md:inline-flex">
-            <Button variant="outline" size="sm">
-              Admin
-            </Button>
-          </Link>
 
           {/* Mobile Menu Button */}
           <Button
@@ -102,13 +97,6 @@ export function SiteHeader() {
               className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             >
               Search
-            </Link>
-            <Link
-              href="/admin"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              Admin
             </Link>
           </nav>
         </div>

@@ -109,14 +109,6 @@ export function SiteFooter() {
                   Contact Us
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/admin"
-                  className="hover:text-foreground transition-colors"
-                >
-                  Admin Panel
-                </Link>
-              </li>
             </ul>
           </div>
         </div>
