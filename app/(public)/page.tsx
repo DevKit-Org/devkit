@@ -22,14 +22,13 @@ import {
   Globe,
   Puzzle,
   Zap,
-  Box,
 } from "lucide-react";
 
 export default async function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-screen flex items-center border-b border-white/10 bg-gradient-to-b from-black via-[#0a1628] to-[#1e40af] text-white">
+      <section className="relative overflow-hidden min-h-screen flex items-center border-b border-white/10 bg-linear-to-b from-black via-[#0a1628] to-[#1e40af] text-white">
         {/* Vibrant blue radial glow */}
         <div className="absolute inset-0 h-full w-full bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(59,130,246,0.5),transparent)]" />
         <div className="absolute inset-0 h-full w-full bg-[radial-gradient(ellipse_100%_100%_at_50%_100%,rgba(37,99,235,0.3),transparent)]" />
@@ -200,7 +199,7 @@ export default async function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-blue-950 to-slate-950">
+      <section className="relative overflow-hidden bg-linear-to-b from-slate-900 via-blue-950 to-slate-950">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_50%,rgba(59,130,246,0.15),transparent)]" />
         <div className="relative z-10 w-full px-4 py-20 md:py-32">
           <div className="mx-auto max-w-2xl text-center">
