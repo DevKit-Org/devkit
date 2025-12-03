@@ -6,7 +6,24 @@ import { Button } from "@/components/ui/button";
 // import { Icons } from "@/components/icons";
 // import type { Category, Resource } from "@/lib/types";
 
-import { ChevronRight, MessageSquare, Sparkles } from "lucide-react";
+import {
+  ChevronRight,
+  MessageSquare,
+  Sparkles,
+  Code2,
+  Blocks,
+  Database,
+  Palette,
+  Terminal,
+  GitBranch,
+  Layers,
+  Cpu,
+  Braces,
+  Globe,
+  Puzzle,
+  Zap,
+  Box,
+} from "lucide-react";
 
 export default async function HomePage() {
   return (
@@ -17,26 +34,63 @@ export default async function HomePage() {
         <div className="absolute inset-0 h-full w-full bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(59,130,246,0.5),transparent)]" />
         <div className="absolute inset-0 h-full w-full bg-[radial-gradient(ellipse_100%_100%_at_50%_100%,rgba(37,99,235,0.3),transparent)]" />
 
-        {/* Decorative floating elements - left side */}
-        <div className="absolute left-[5%] top-1/3 hidden lg:block">
+        {/* Floating Icons - Left Side */}
+        <div className="absolute left-[3%] top-1/4 hidden lg:block">
           <div className="relative">
-            <div className="absolute -left-4 -top-4 h-16 w-16 rounded-xl bg-green-500/80 shadow-lg shadow-green-500/30 rotate-6" />
-            <div className="absolute left-8 top-8 h-14 w-14 rounded-xl bg-blue-400/80 shadow-lg shadow-blue-400/30 -rotate-12" />
-            <div className="absolute left-2 top-20 h-12 w-12 rounded-xl bg-red-400/80 shadow-lg shadow-red-400/30 rotate-12" />
-            <div className="absolute -left-6 top-16 h-10 w-10 rounded-lg bg-slate-700/80 shadow-lg" />
+            {/* Code icon */}
+            <div className="absolute -left-4 -top-4 h-16 w-16 rounded-xl bg-linear-to-br from-green-500 to-emerald-600 shadow-lg shadow-green-500/30 rotate-6 flex items-center justify-center">
+              <Code2 className="h-8 w-8 text-white" />
+            </div>
+            {/* Database icon */}
+            <div className="absolute left-12 top-16 h-14 w-14 rounded-xl bg-linear-to-br from-blue-400 to-blue-600 shadow-lg shadow-blue-400/30 -rotate-12 flex items-center justify-center">
+              <Database className="h-7 w-7 text-white" />
+            </div>
+            {/* Terminal icon */}
+            <div className="absolute -left-8 top-32 h-12 w-12 rounded-xl bg-linear-to-br from-slate-600 to-slate-800 shadow-lg shadow-slate-500/30 rotate-12 flex items-center justify-center">
+              <Terminal className="h-6 w-6 text-white" />
+            </div>
+            {/* Palette icon */}
+            <div className="absolute left-6 top-48 h-14 w-14 rounded-xl bg-linear-to-br from-pink-500 to-rose-600 shadow-lg shadow-pink-500/30 -rotate-6 flex items-center justify-center">
+              <Palette className="h-7 w-7 text-white" />
+            </div>
+            {/* Git icon */}
+            <div className="absolute -left-2 top-64 h-12 w-12 rounded-xl bg-linear-to-br from-orange-500 to-red-600 shadow-lg shadow-orange-500/30 rotate-12 flex items-center justify-center">
+              <GitBranch className="h-6 w-6 text-white" />
+            </div>
           </div>
         </div>
 
-        {/* Decorative floating elements - right side */}
-        <div className="absolute right-[5%] top-1/4 hidden lg:block">
+        {/* Floating Icons - Right Side */}
+        <div className="absolute right-[3%] top-1/5 hidden lg:block">
           <div className="relative">
-            <div className="absolute right-0 top-0 h-12 w-12 rounded-xl bg-green-400/80 shadow-lg shadow-green-400/30 -rotate-6" />
-            <div className="absolute right-16 top-8 h-10 w-10 rounded-xl bg-slate-600/80 shadow-lg rotate-12" />
-            <div className="absolute right-8 top-20 h-14 w-14 rounded-xl bg-purple-400/80 shadow-lg shadow-purple-400/30 -rotate-6" />
-            <div className="absolute right-24 top-28 h-10 w-10 rounded-lg bg-pink-400/80 shadow-lg shadow-pink-400/30" />
-            <div className="absolute right-4 top-40 h-12 w-12 rounded-xl bg-blue-500/80 shadow-lg shadow-blue-500/30 rotate-6" />
-            <div className="absolute right-20 top-48 h-8 w-8 rounded-lg bg-red-400/80 shadow-lg shadow-red-400/30" />
-            <div className="absolute right-0 top-56 h-10 w-10 rounded-xl bg-orange-400/80 shadow-lg shadow-orange-400/30 -rotate-12" />
+            {/* Blocks/Components icon */}
+            <div className="absolute right-0 top-0 h-14 w-14 rounded-xl bg-linear-to-br from-cyan-400 to-blue-500 shadow-lg shadow-cyan-400/30 -rotate-6 flex items-center justify-center">
+              <Blocks className="h-7 w-7 text-white" />
+            </div>
+            {/* Globe/API icon */}
+            <div className="absolute right-20 top-12 h-12 w-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-violet-500/30 rotate-12 flex items-center justify-center">
+              <Globe className="h-6 w-6 text-white" />
+            </div>
+            {/* Layers icon */}
+            <div className="absolute right-4 top-28 h-16 w-16 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/30 -rotate-6 flex items-center justify-center">
+              <Layers className="h-8 w-8 text-white" />
+            </div>
+            {/* Puzzle/Plugin icon */}
+            <div className="absolute right-24 top-40 h-12 w-12 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg shadow-amber-400/30 rotate-6 flex items-center justify-center">
+              <Puzzle className="h-6 w-6 text-white" />
+            </div>
+            {/* CPU/Tech icon */}
+            <div className="absolute right-8 top-52 h-14 w-14 rounded-xl bg-gradient-to-br from-teal-400 to-emerald-500 shadow-lg shadow-teal-400/30 rotate-6 flex items-center justify-center">
+              <Cpu className="h-7 w-7 text-white" />
+            </div>
+            {/* Braces/JSON icon */}
+            <div className="absolute right-28 top-64 h-10 w-10 rounded-lg bg-gradient-to-br from-red-400 to-rose-500 shadow-lg shadow-red-400/30 -rotate-12 flex items-center justify-center">
+              <Braces className="h-5 w-5 text-white" />
+            </div>
+            {/* Zap/Performance icon */}
+            <div className="absolute right-2 top-72 h-12 w-12 rounded-xl bg-gradient-to-br from-yellow-400 to-amber-500 shadow-lg shadow-yellow-400/30 rotate-12 flex items-center justify-center">
+              <Zap className="h-6 w-6 text-white" />
+            </div>
           </div>
         </div>
 
@@ -86,35 +140,85 @@ export default async function HomePage() {
         </div>
       </section>
       {/* About Section */}
-      <section className="w-full px-4 py-16 md:py-24">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
-            About DevKit
+      <section className="w-full px-4 py-20 md:py-32 bg-gradient-to-b from-slate-950 to-slate-900">
+        <div className="mx-auto max-w-4xl text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-1.5 text-sm text-blue-300 mb-6">
+            <Sparkles className="h-4 w-4" />
+            <span>Why DevKit?</span>
+          </div>
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl text-white">
+            Built for developers,
+            <span className="text-blue-400"> by developers</span>
           </h2>
-          <p className="mt-6 text-pretty text-lg text-muted-foreground leading-relaxed">
+          <p className="mt-6 text-pretty text-lg md:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
             DevKit is a developer-focused resource platform designed to empower
             you with high-quality, ready-to-use content for building modern
             applications. Whether you&apos;re a beginner or experienced, DevKit
             helps you save time, discover tools, learn faster, and build better
             products.
           </p>
+
+          {/* Feature Cards */}
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-6 rounded-2xl bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4 mx-auto">
+                <Zap className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Save Time
+              </h3>
+              <p className="text-gray-400 text-sm">
+                Find curated resources quickly without endless searching across
+                the web.
+              </p>
+            </div>
+            <div className="p-6 rounded-2xl bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4 mx-auto">
+                <Layers className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Quality First
+              </h3>
+              <p className="text-gray-400 text-sm">
+                Every resource is reviewed for quality, relevance, and
+                usefulness.
+              </p>
+            </div>
+            <div className="p-6 rounded-2xl bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center mb-4 mx-auto">
+                <Code2 className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Always Updated
+              </h3>
+              <p className="text-gray-400 text-sm">
+                New resources added regularly to keep you ahead of the curve.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
+
       {/* CTA Section */}
-      <section className="border-t border-border/40 bg-primary/5">
-        <div className="w-full px-4 py-16 md:py-24">
+      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-blue-950 to-slate-950">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_50%,rgba(59,130,246,0.15),transparent)]" />
+        <div className="relative z-10 w-full px-4 py-20 md:py-32">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl text-white">
               Have a suggestion?
             </h2>
-            <p className="mt-4 text-muted-foreground">
+            <p className="mt-4 text-lg text-gray-400">
               Have an idea, suggestion, or want to collaborate? We&apos;d love
               to hear from you.
             </p>
-            <Button asChild size="lg" className="mt-8">
+            <Button
+              asChild
+              size="lg"
+              className="mt-8 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-6 text-lg rounded-full shadow-lg shadow-blue-600/30 transition-all duration-300"
+            >
               <Link href="/contact">
                 Get in Touch
-                <MessageSquare className="ml-2 h-4 w-4" />
+                <MessageSquare className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           </div>

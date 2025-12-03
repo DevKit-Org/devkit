@@ -70,7 +70,7 @@ export function SiteHeader() {
 
         {/* Right Side */}
         <div className="flex items-center gap-4">
-          {/* GitHub Link or Social */}
+          {/* GitHub Link */}{" "}
           <Link
             href="https://github.com/DevKit-Org"
             target="_blank"
@@ -79,7 +79,6 @@ export function SiteHeader() {
           >
             <Icons.github className="h-4 w-4" />
           </Link>
-
           {/* CTA Button */}
           <Button
             asChild
@@ -91,7 +90,6 @@ export function SiteHeader() {
               <ArrowRight className="ml-1.5 h-4 w-4" />
             </Link>
           </Button>
-
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"
