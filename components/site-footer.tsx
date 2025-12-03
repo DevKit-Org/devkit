@@ -4,7 +4,7 @@ import { Icons } from "@/components/icons";
 export function SiteFooter() {
   return (
     <footer className="border-t border-border/40 bg-background">
-      <div className="container max-w-screen-2xl px-4 py-12">
+      <div className="w-full px-4 py-12">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
