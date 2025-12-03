@@ -7,8 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
-import { Icons } from "@/components/icons";
+import { CheckCircle, Send } from "lucide-react";
 
 export function ContactForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,65 +47,85 @@ export function ContactForm() {
 
   if (isSuccess) {
     return (
-      <Card>
-        <CardContent className="p-8 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-500/10">
-            <Icons.chevronRight className="h-6 w-6 text-green-500" />
-          </div>
-          <h3 className="text-lg font-semibold">Message Sent!</h3>
-          <p className="mt-2 text-muted-foreground">
-            Thank you for reaching out. We&apos;ll get back to you soon.
-          </p>
-        </CardContent>
-      </Card>
+      <div className="rounded-2xl border border-white/10 bg-slate-800/50 backdrop-blur-sm p-8 text-center">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-green-500 to-emerald-500 shadow-lg shadow-green-500/30">
+          <CheckCircle className="h-7 w-7 text-white" />
+        </div>
+        <h3 className="text-xl font-semibold text-white">Message Sent!</h3>
+        <p className="mt-2 text-gray-400">
+          Thank you for reaching out. We&apos;ll get back to you soon.
+        </p>
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardContent className="p-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              name="name"
-              placeholder="Your name"
-              disabled={isLoading}
-            />
+    <div className="rounded-2xl border border-white/10 bg-slate-800/50 backdrop-blur-sm p-6 md:p-8">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="name" className="text-gray-300">
+            Name
+          </Label>
+          <Input
+            id="name"
+            name="name"
+            placeholder="Your name"
+            disabled={isLoading}
+            className="bg-slate-900/50 border-white/10 text-white placeholder:text-gray-500 focus:border-blue-500 focus:ring-blue-500/20"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-gray-300">
+            Email *
+          </Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="your@email.com"
+            required
+            disabled={isLoading}
+            className="bg-slate-900/50 border-white/10 text-white placeholder:text-gray-500 focus:border-blue-500 focus:ring-blue-500/20"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="message" className="text-gray-300">
+            Message *
+          </Label>
+          <Textarea
+            id="message"
+            name="message"
+            placeholder="Your message..."
+            rows={5}
+            required
+            disabled={isLoading}
+            className="bg-slate-900/50 border-white/10 text-white placeholder:text-gray-500 focus:border-blue-500 focus:ring-blue-500/20 resize-none"
+          />
+        </div>
+
+        {error && (
+          <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-3">
+            <p className="text-sm text-red-400">{error}</p>
           </div>
+        )}
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Email *</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="your@email.com"
-              required
-              disabled={isLoading}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="message">Message *</Label>
-            <Textarea
-              id="message"
-              name="message"
-              placeholder="Your message..."
-              rows={5}
-              required
-              disabled={isLoading}
-            />
-          </div>
-
-          {error && <p className="text-sm text-destructive">{error}</p>}
-
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Sending..." : "Send Message"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+        <Button
+          type="submit"
+          className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-6 rounded-xl shadow-lg shadow-blue-600/30 transition-all duration-300"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            "Sending..."
+          ) : (
+            <>
+              Send Message
+              <Send className="ml-2 h-4 w-4" />
+            </>
+          )}
+        </Button>
+      </form>
+    </div>
   );
 }
