@@ -1,0 +1,68 @@
+import type React from "react";
+import {
+  Globe,
+  FileCode,
+  Wrench,
+  Layout,
+  BookOpen,
+  Package,
+  Search,
+  Menu,
+  X,
+  ChevronRight,
+  ExternalLink,
+  Star,
+  Plus,
+  Pencil,
+  Trash2,
+  LogOut,
+  Moon,
+  Sun,
+  Home,
+  Layers,
+  Settings,
+  MessageSquare,
+  ArrowLeft,
+  Filter,
+  Tag,
+} from "lucide-react";
+
+export const Icons = {
+  globe: Globe,
+  fileCode: FileCode,
+  wrench: Wrench,
+  layout: Layout,
+  bookOpen: BookOpen,
+  package: Package,
+  search: Search,
+  menu: Menu,
+  x: X,
+  chevronRight: ChevronRight,
+  externalLink: ExternalLink,
+  star: Star,
+  plus: Plus,
+  pencil: Pencil,
+  trash: Trash2,
+  logOut: LogOut,
+  moon: Moon,
+  sun: Sun,
+  home: Home,
+  layers: Layers,
+  settings: Settings,
+  messageSquare: MessageSquare,
+  arrowLeft: ArrowLeft,
+  filter: Filter,
+  tag: Tag,
+};
+
+export function getCategoryIcon(iconName: string | null) {
+  const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+    Globe: Icons.globe,
+    FileCode: Icons.fileCode,
+    Wrench: Icons.wrench,
+    Layout: Icons.layout,
+    BookOpen: Icons.bookOpen,
+    Package: Icons.package,
+  };
+  return iconMap[iconName || ""] || Icons.layers;
+}
