@@ -11,6 +11,7 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 const navItems = [
+  { href: "/", label: "Home" },
   { href: "/categories", label: "Categories" },
   { href: "/resources", label: "Resources" },
   { href: "/about", label: "About" },
