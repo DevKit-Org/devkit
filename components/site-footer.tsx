@@ -1,17 +1,20 @@
 import Link from "next/link";
-import { Icons } from "@/components/icons";
+import Image from "next/image";
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-border/40 bg-background">
-      <div className="w-full px-4 py-12">
+      <div className="w-full px-4 pt-5">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <Icons.layers className="h-4 w-4 text-primary-foreground" />
-              </div>
-              <span className="font-semibold text-xl">DevKit</span>
+              <Image
+                src="/main-logo.png"
+                alt="DevKit"
+                width={100}
+                height={100}
+                className="rounded-sm"
+              />
             </Link>
             <p className="text-sm text-muted-foreground">
               Your ultimate developer resource hub for APIs, templates, tools,
@@ -118,7 +121,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-border pt-8 text-center text-sm text-muted-foreground">
+        <div className="mt-7 border-t border-border py-2 text-center text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} DevKit. All rights reserved.</p>
         </div>
       </div>
