@@ -25,6 +25,7 @@ import {
   ArrowLeft,
   Filter,
   Tag,
+  Github,
 } from "lucide-react";
 
 export const Icons = {
@@ -53,6 +54,7 @@ export const Icons = {
   arrowLeft: ArrowLeft,
   filter: Filter,
   tag: Tag,
+  github: Github,
 };
 
 export function getCategoryIcon(iconName: string | null) {
