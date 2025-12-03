@@ -3,50 +3,53 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 // import { ResourceCard } from "@/components/resource-card";
 // import { CategoryCard } from "@/components/category-card";
-import { Icons } from "@/components/icons";
+// import { Icons } from "@/components/icons";
 // import type { Category, Resource } from "@/lib/types";
+
+import { ChevronRight, MessageSquare } from "lucide-react";
 
 export default async function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-border/40 bg-gradient-to-b from-background to-muted/20">
-        <div className=" w-full px-4 py-24 md:py-32">
-          <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-              Your Ultimate Developer{" "}
-              <span className="text-primary">Resource Hub</span>
+      <section className="relative overflow-hidden min-h-screen flex items-center border-b border-border/40 bg-gradient-to-b from-black via-[#091743] to-blue-900 text-white">
+        {/* Extra black-blue radial accent */}
+        <div className="absolute inset-0 -z-20 h-full w-full bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,#1240e0_40%,transparent_90%)]" />
+        {/* Main Hero Content (centered) */}
+        <div className="w-full px-4 flex flex-col items-center justify-center min-h-screen">
+          <div className="mx-auto max-w-4xl text-center">
+            <h1 className="text-balance text-[2.8rem] md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight mb-6">
+              <span className="text-primary">Your </span>
+              <span className="text-blue-300">all-in-one </span>
+              developer resource hub.
             </h1>
-            <p className="mt-6 text-pretty text-lg text-muted-foreground md:text-xl">
-              DevKit gives you APIs, templates, tools, UI components, and
-              ready-to-use assets to speed up your development workflow.
+            <p className="mt-8 text-pretty text-xl md:text-2xl text-[#e2eaff] font-medium max-w-2xl mx-auto">
+              Discover, use, and learn with premium APIs, UI components,
+              templates, tools, tutorials, libraries and more.
             </p>
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-14 flex flex-col items-center justify-center gap-5 sm:flex-row">
               <Button
                 asChild
                 size="lg"
-                className="w-full sm:w-auto bg-blue-700 text-white flex items-center justify-center hover:bg-blue-800"
+                className="w-full sm:w-auto bg-blue-700 text-white flex items-center justify-center font-semibold text-xl px-12 py-5 shadow-md hover:bg-blue-800  md:text-xl"
               >
                 <Link href="/resources">
                   Browse Resources
-                  <Icons.chevronRight className="ml-2 h-4 w-4" />
+                  <ChevronRight className="ml-2 h-6 w-6" />
                 </Link>
               </Button>
               <Button
                 asChild
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto bg-transparent border flex items-center justify-center border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white"
+                className="w-full sm:w-auto border hover:text-white bg-transparent font-semibold px-12 py-5 text-xl"
               >
-                <Link href="/categories">View Categories</Link>
+                <Link href="/categories">Explore Categories</Link>
               </Button>
             </div>
           </div>
         </div>
-        {/* Decorative grid background */}
-        <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
       </section>
-
       {/* About Section */}
       <section className="w-full px-4 py-16 md:py-24">
         <div className="mx-auto max-w-3xl text-center">
@@ -62,7 +65,6 @@ export default async function HomePage() {
           </p>
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="border-t border-border/40 bg-primary/5">
         <div className="w-full px-4 py-16 md:py-24">
@@ -77,7 +79,7 @@ export default async function HomePage() {
             <Button asChild size="lg" className="mt-8">
               <Link href="/contact">
                 Get in Touch
-                <Icons.messageSquare className="ml-2 h-4 w-4" />
+                <MessageSquare className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>

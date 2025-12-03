@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 // import { SearchCommand } from "@/components/search-command";
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
@@ -22,7 +21,7 @@ export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full  bg-black text-white shadow-sm">
       <div className="w-full flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <Image
@@ -35,16 +34,16 @@ export function SiteHeader() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "text-sm font-medium transition-colors hover:text-primary",
+                "text-base font-semibold transition-colors px-2 py-1 rounded hover:text-blue-700 hover:bg-blue-50",
                 pathname === item.href
-                  ? "text-foreground"
-                  : "text-muted-foreground"
+                  ? "text-blue-700 bg-blue-50"
+                  : "text-white"
               )}
             >
               {item.label}
@@ -54,7 +53,6 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           {/* <SearchCommand /> */}
-          <ThemeToggle />
 
           {/* Mobile Menu Button */}
           <Button
@@ -64,9 +62,9 @@ export function SiteHeader() {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? (
-              <Icons.x className="h-5 w-5" />
+              <Icons.x className="h-5 w-5 text-black" />
             ) : (
-              <Icons.menu className="h-5 w-5" />
+              <Icons.menu className="h-5 w-5 text-black" />
             )}
           </Button>
         </div>
@@ -74,7 +72,7 @@ export function SiteHeader() {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border">
+        <div className="md:hidden border-t border-border bg-white pt-1 pb-2 shadow">
           <nav className="container flex flex-col gap-2 p-4">
             {navItems.map((item) => (
               <Link
@@ -82,22 +80,15 @@ export function SiteHeader() {
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
                 className={cn(
-                  "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                  "px-3 py-2 rounded-md text-base font-semibold transition-colors",
                   pathname === item.href
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-gray-800 hover:bg-blue-50 hover:text-blue-700"
                 )}
               >
                 {item.label}
               </Link>
             ))}
-            <Link
-              href="/search"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            >
-              Search
-            </Link>
           </nav>
         </div>
       )}
