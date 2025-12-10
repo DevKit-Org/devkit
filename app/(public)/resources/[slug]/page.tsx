@@ -1,17 +1,12 @@
-import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Link from "next/link";
-import {
-  Sparkles,
-  ArrowLeft,
-  ExternalLink,
-  Calendar,
-  Tag,
-  Layers,
-  Globe,
-} from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
-// import { createClient } from "@/lib/supabase/server";
-// import type { Resource } from "@/lib/types";
+import { Badge } from "@/components/ui/badge";
+import { Icons, getCategoryIcon } from "@/components/icons";
+import { ResourceCard } from "@/components/resource-card";
+import type { Resource } from "@/lib/types";
+import type { Metadata } from "next";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -19,44 +14,63 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  // const supabase = await createClient();
-  // const { data: resource } = await supabase
-  //   .from("resources")
-  //   .select("*")
-  //   .eq("slug", slug)
-  //   .single();
+  const supabase = await createClient();
+  const { data: resource } = await supabase
+    .from("resources")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (!resource) {
+    return { title: "Resource Not Found - DevKit" };
+  }
 
   return {
-    title: `${
-      slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ")
-    } - DevKit`,
-    description: `View details about ${slug} on DevKit`,
+    title: `${resource.title} - DevKit`,
+    description: resource.description || `View ${resource.title} on DevKit`,
   };
 }
 
+const typeColors: Record<string, string> = {
+  api: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+  template: "bg-green-500/10 text-green-600 dark:text-green-400",
+  tool: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
+  "ui-component": "bg-purple-500/10 text-purple-600 dark:text-purple-400",
+  tutorial: "bg-pink-500/10 text-pink-600 dark:text-pink-400",
+  library: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400",
+};
+
 export default async function ResourcePage({ params }: Props) {
   const { slug } = await params;
-  // const supabase = await createClient();
+  const supabase = await createClient();
 
-  // Fetch resource
-  // const { data: resource } = await supabase
-  //   .from("resources")
-  //   .select("*, category:categories(*)")
-  //   .eq("slug", slug)
-  //   .single();
+  const { data: resource } = await supabase
+    .from("resources")
+    .select("*, category:categories(*)")
+    .eq("slug", slug)
+    .single();
 
-  const resourceName =
-    slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, " ");
+  if (!resource) {
+    notFound();
+  }
 
-  // Placeholder resource data - replace with actual data from database
-  const resource = {
-    name: resourceName,
-    description:
-      "This resource will have a detailed description once the database is connected.",
-    type: "tool",
-    url: "#",
-    category: { name: "General", slug: "general" },
-  };
+  const typedResource = resource as Resource;
+
+  // Fetch related resources from same category
+  let relatedResources: Resource[] = [];
+  if (typedResource.category_id) {
+    const { data: related } = await supabase
+      .from("resources")
+      .select("*, category:categories(*)")
+      .eq("category_id", typedResource.category_id)
+      .neq("id", typedResource.id)
+      .limit(3);
+    relatedResources = (related || []) as Resource[];
+  }
+
+  const CategoryIcon = typedResource.category
+    ? getCategoryIcon(typedResource.category.icon)
+    : Icons.layers;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -72,41 +86,31 @@ export default async function ResourcePage({ params }: Props) {
             href="/resources"
             className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <Icons.arrowLeft className="h-4 w-4" />
             <span>Back to Resources</span>
           </Link>
 
-          <div className="text-center">
-            {/* Badge */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-500/10 px-4 py-1.5 text-sm text-blue-300">
-              <Sparkles className="h-4 w-4" />
-              <span className="capitalize">{resource.type}</span>
+          <div className="flex items-start gap-6">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-400/30">
+              <CategoryIcon className="h-10 w-10 text-blue-400" />
             </div>
-
-            {/* Icon */}
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-500 shadow-lg shadow-cyan-500/30">
-              <Globe className="h-10 w-10 text-white" />
-            </div>
-
-            <h1 className="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl text-white">
-              {resource.name}
-            </h1>
-
-            {/* Meta Info */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-gray-400">
-              <div className="flex items-center gap-2">
-                <Layers className="h-4 w-4 text-blue-400" />
+            <div className="flex-1">
+              <div className="flex items-center gap-3 flex-wrap mb-2">
+                <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+                  {typedResource.title}
+                </h1>
+                {typedResource.featured && (
+                  <Icons.star className="h-6 w-6 text-amber-400 fill-amber-400" />
+                )}
+              </div>
+              {typedResource.category && (
                 <Link
-                  href={`/categories/${resource.category.slug}`}
-                  className="hover:text-white transition-colors"
+                  href={`/categories/${typedResource.category.slug}`}
+                  className="text-gray-400 hover:text-blue-300 transition-colors inline-block"
                 >
-                  {resource.category.name}
+                  {typedResource.category.name}
                 </Link>
-              </div>
-              <div className="flex items-center gap-2">
-                <Tag className="h-4 w-4 text-blue-400" />
-                <span className="capitalize">{resource.type}</span>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -114,53 +118,94 @@ export default async function ResourcePage({ params }: Props) {
 
       {/* Content Section */}
       <section className="relative z-10 px-4 pb-20 md:pb-32">
-        <div className="mx-auto max-w-3xl">
-          {/* Description Card */}
-          <div className="rounded-2xl border border-white/10 bg-slate-800/50 backdrop-blur-sm p-8">
-            <h2 className="text-xl font-semibold text-white mb-4">
-              About this resource
-            </h2>
-            <p className="text-gray-400 leading-relaxed">
-              {resource.description}
-            </p>
+        <div className="mx-auto max-w-6xl">
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="flex flex-wrap gap-2">
+                <Badge className={`${typeColors[typedResource.type]} border-0`}>
+                  {typedResource.type.replace("-", " ")}
+                </Badge>
+                {typedResource.tags.map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant="outline"
+                    className="border-white/10 text-gray-300 hover:bg-white/5"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
 
-            {/* CTA Button */}
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+              <div className="rounded-2xl border border-white/10 bg-slate-800/50 backdrop-blur-sm p-8">
+                <h2 className="text-xl font-semibold text-white mb-4">
+                  About this resource
+                </h2>
+                <p className="text-gray-400 leading-relaxed">
+                  {typedResource.description || "No description available."}
+                </p>
+              </div>
+
               <Button
                 asChild
                 size="lg"
                 className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-6 rounded-xl shadow-lg shadow-blue-600/30 transition-all duration-300"
               >
                 <a
-                  href={resource.url}
+                  href={typedResource.url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Visit Resource
-                  <ExternalLink className="ml-2 h-5 w-5" />
+                  <Icons.externalLink className="ml-2 h-5 w-5" />
                 </a>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="border-white/20 hover:bg-white/10 hover:border-white/40 text-white bg-transparent font-semibold px-8 py-6 rounded-xl transition-all duration-300"
-              >
-                <Link href="/resources">Explore More</Link>
-              </Button>
             </div>
-          </div>
 
-          {/* Related Resources Placeholder */}
-          <div className="mt-12">
-            <h2 className="text-xl font-semibold text-white mb-6">
-              Related Resources
-            </h2>
-            <div className="rounded-2xl border border-white/10 bg-slate-800/30 p-8 text-center">
-              <p className="text-gray-400">
-                Related resources will appear here once the database is
-                connected.
-              </p>
+            {/* Sidebar */}
+            <div className="space-y-6">
+              <div className="rounded-2xl border border-white/10 bg-slate-800/50 backdrop-blur-sm p-6 space-y-4">
+                <h3 className="font-semibold text-white">Resource Details</h3>
+                <dl className="space-y-4 text-sm">
+                  <div>
+                    <dt className="text-gray-400 text-xs uppercase tracking-wide mb-1">
+                      Type
+                    </dt>
+                    <dd className="font-medium text-gray-200 capitalize">
+                      {typedResource.type.replace("-", " ")}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-gray-400 text-xs uppercase tracking-wide mb-1">
+                      Category
+                    </dt>
+                    <dd className="font-medium text-gray-200">
+                      {typedResource.category?.name || "Uncategorized"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-gray-400 text-xs uppercase tracking-wide mb-1">
+                      Added
+                    </dt>
+                    <dd className="font-medium text-gray-200">
+                      {new Date(typedResource.created_at).toLocaleDateString()}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              {relatedResources.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-white mb-4">
+                    Related Resources
+                  </h3>
+                  <div className="space-y-4">
+                    {relatedResources.map((related) => (
+                      <ResourceCard key={related.id} resource={related} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

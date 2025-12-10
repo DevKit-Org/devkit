@@ -1,10 +1,10 @@
 import Link from "next/link";
-// import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
-// import { ResourceCard } from "@/components/resource-card";
-// import { CategoryCard } from "@/components/category-card";
-// import { Icons } from "@/components/icons";
-// import type { Category, Resource } from "@/lib/types";
+import { ResourceCard } from "@/components/resource-card";
+import { CategoryCard } from "@/components/category-card";
+import { Icons } from "@/components/icons";
+import type { Category, Resource } from "@/lib/types";
 
 import {
   ChevronRight,
@@ -25,6 +25,21 @@ import {
 } from "lucide-react";
 
 export default async function HomePage() {
+  const supabase = await createClient();
+
+  // Fetch featured resources and categories
+  const [resourcesResult, categoriesResult] = await Promise.all([
+    supabase
+      .from("resources")
+      .select("*, category:categories(*)")
+      .eq("featured", true)
+      .order("created_at", { ascending: false })
+      .limit(6),
+    supabase.from("categories").select("*").order("name"),
+  ]);
+
+  const featuredResources = (resourcesResult.data || []) as Resource[];
+  const categories = (categoriesResult.data || []) as Category[];
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -198,7 +213,67 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Categories Section */}
+      <section className="relative z-10 w-full px-4 py-20 md:py-32 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-white">
+                Browse by Category
+              </h2>
+              <p className="mt-2 text-gray-400">
+                Find the resources you need, organized by type
+              </p>
+            </div>
+            <Button
+              asChild
+              variant="ghost"
+              className="mt-4 md:mt-0 text-blue-400 hover:text-blue-300 hover:bg-slate-800/50"
+            >
+              <Link href="/categories" className="flex items-center">
+                View all
+                <Icons.chevronRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {categories.map((category) => (
+              <CategoryCard key={category.id} category={category} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Resources Section */}
+      <section className="relative z-10 w-full px-4 py-20 md:py-32 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-t border-white/10">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-white">
+                Featured Resources
+              </h2>
+              <p className="mt-2 text-gray-400">
+                Hand-picked tools and resources for developers
+              </p>
+            </div>
+            <Button
+              asChild
+              variant="ghost"
+              className="mt-4 md:mt-0 text-blue-400 hover:text-blue-300 hover:bg-slate-800/50"
+            >
+              <Link href="/resources" className="flex items-center">
+                View all
+                <Icons.chevronRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredResources.map((resource) => (
+              <ResourceCard key={resource.id} resource={resource} />
+            ))}
+          </div>
+        </div>
+      </section>
       <section className="relative overflow-hidden bg-linear-to-b from-slate-900 via-blue-950 to-slate-950">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_50%,rgba(59,130,246,0.15),transparent)]" />
         <div className="relative z-10 w-full px-4 py-20 md:py-32">
