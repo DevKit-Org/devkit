@@ -1,6 +1,6 @@
-// import { createClient } from "@/lib/supabase/server";
-// import { CategoryCard } from "@/components/category-card";
-// import type { Category } from "@/lib/types";
+import { createClient } from "@/lib/supabase/server";
+import { CategoryCard } from "@/components/category-card";
+import type { Category } from "@/lib/types";
 import type { Metadata } from "next";
 import { Sparkles, Layers, FolderOpen } from "lucide-react";
 
@@ -10,23 +10,23 @@ export const metadata: Metadata = {
 };
 
 export default async function CategoriesPage() {
-  // const supabase = await createClient();
+  const supabase = await createClient();
 
-  // const { data: categories } = await supabase
-  //   .from("categories")
-  //   .select("*")
-  //   .order("name");
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("*")
+    .order("name");
 
   // Get resource counts for each category
-  // const categoriesWithCounts = await Promise.all(
-  //   (categories || []).map(async (category: Category) => {
-  //     const { count } = await supabase
-  //       .from("resources")
-  //       .select("*", { count: "exact", head: true })
-  //       .eq("category_id", category.id);
-  //     return { category, count: count || 0 };
-  //   })
-  // );
+  const categoriesWithCounts = await Promise.all(
+    (categories || []).map(async (category: Category) => {
+      const { count } = await supabase
+        .from("resources")
+        .select("*", { count: "exact", head: true })
+        .eq("category_id", category.id);
+      return { category, count: count || 0 };
+    })
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -61,18 +61,29 @@ export default async function CategoriesPage() {
       {/* Categories Grid Section */}
       <section className="relative z-10 px-4 pb-20 md:pb-32">
         <div className="mx-auto max-w-7xl">
-          {/* Empty State */}
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="h-16 w-16 rounded-2xl bg-slate-800/50 border border-white/10 flex items-center justify-center mb-4">
-              <FolderOpen className="h-8 w-8 text-gray-500" />
-            </div>
-            <h3 className="text-lg font-semibold text-white">
-              No categories yet
-            </h3>
-            <p className="mt-2 text-gray-400">
-              Categories will appear here once added.
-            </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {categoriesWithCounts.map(({ category, count }) => (
+              <CategoryCard
+                key={category.id}
+                category={category}
+                resourceCount={count}
+              />
+            ))}
           </div>
+          {/* Empty State */}
+          {(!categories || categories.length === 0) && (
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <div className="h-16 w-16 rounded-2xl bg-slate-800/50 border border-white/10 flex items-center justify-center mb-4">
+                <FolderOpen className="h-8 w-8 text-gray-500" />
+              </div>
+              <h3 className="text-lg font-semibold text-white">
+                No categories yet
+              </h3>
+              <p className="mt-2 text-gray-400">
+                Categories will appear here once added.
+              </p>
+            </div>
+          )}
         </div>
       </section>
     </div>

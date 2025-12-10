@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-// import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { ResourceCard } from "@/components/resource-card";
-// import { ResourceFilters } from "@/components/resource-filters";
-// import { Pagination } from "@/components/pagination";
+import { ResourceFilters } from "@/components/resource-filters";
+import { Pagination } from "@/components/pagination";
 import type { Category, Resource } from "@/lib/types";
 import type { Metadata } from "next";
 import { Sparkles, Box, Package } from "lucide-react";
@@ -27,46 +27,46 @@ export default async function ResourcesPage({ searchParams }: Props) {
   const categorySlug = params.category;
   const limit = 12;
 
-  //   const supabase = await createClient();
+  const supabase = await createClient();
 
   // Fetch categories for filter
-  //   const { data: categories } = await supabase
-  //     .from("categories")
-  //     .select("*")
-  //     .order("name");
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("*")
+    .order("name");
 
   //   // Get category ID if slug provided
-  //   let categoryId: string | undefined;
-  //   if (categorySlug) {
-  //     const { data: cat } = await supabase
-  //       .from("categories")
-  //       .select("id")
-  //       .eq("slug", categorySlug)
-  //       .single();
-  //     categoryId = cat?.id;
-  //   }
+  let categoryId: string | undefined;
+  if (categorySlug) {
+    const { data: cat } = await supabase
+      .from("categories")
+      .select("id")
+      .eq("slug", categorySlug)
+      .single();
+    categoryId = cat?.id;
+  }
 
   // Build resources query
-  //   const from = (page - 1) * limit;
-  //   const to = from + limit - 1;
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
 
-  //   let query = supabase
-  //     .from("resources")
-  //     .select("*, category:categories(*)", { count: "exact" });
+  let query = supabase
+    .from("resources")
+    .select("*, category:categories(*)", { count: "exact" });
 
-  //   if (type) {
-  //     query = query.eq("type", type);
-  //   }
-  //   if (categoryId) {
-  //     query = query.eq("category_id", categoryId);
-  //   }
+  if (type) {
+    query = query.eq("type", type);
+  }
+  if (categoryId) {
+    query = query.eq("category_id", categoryId);
+  }
 
-  //   const { data: resources, count } = await query
-  //     .order("featured", { ascending: false })
-  //     .order("created_at", { ascending: false })
-  //     .range(from, to);
+  const { data: resources, count } = await query
+    .order("featured", { ascending: false })
+    .order("created_at", { ascending: false })
+    .range(from, to);
 
-  //   const totalPages = Math.ceil((count || 0) / limit);
+  const totalPages = Math.ceil((count || 0) / limit);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -101,20 +101,64 @@ export default async function ResourcesPage({ searchParams }: Props) {
       {/* Resources Grid Section */}
       <section className="relative z-10 px-4 pb-20 md:pb-32">
         <div className="mx-auto max-w-7xl">
-          {/* Filters would go here */}
-          {/* <ResourceFilters categories={categories} /> */}
-
-          {/* Empty State */}
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="h-16 w-16 rounded-2xl bg-slate-800/50 border border-white/10 flex items-center justify-center mb-4">
-              <Package className="h-8 w-8 text-gray-500" />
+          <div className="container max-w-screen-2xl px-4 py-12 md:py-16">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl text-white">
+                Resources
+              </h2>
+              <p className="mt-2 text-lg text-gray-400">
+                Browse all developer resources
+              </p>
             </div>
-            <h3 className="text-lg font-semibold text-white">
-              No resources yet
-            </h3>
-            <p className="mt-2 text-gray-400">
-              Resources will appear here once added.
-            </p>
+
+            <div className="flex flex-col lg:flex-row gap-8">
+              {/* Sidebar Filters */}
+              <aside className="w-full lg:w-64 shrink-0">
+                <Suspense
+                  fallback={
+                    <div className="h-64 animate-pulse bg-slate-800/50 rounded-lg" />
+                  }
+                >
+                  <ResourceFilters
+                    categories={(categories || []) as Category[]}
+                    currentType={type}
+                    currentCategory={categorySlug}
+                  />
+                </Suspense>
+              </aside>
+
+              {/* Resource Grid */}
+              <div className="flex-1">
+                {resources && resources.length > 0 ? (
+                  <>
+                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                      {(resources as Resource[]).map((resource) => (
+                        <ResourceCard key={resource.id} resource={resource} />
+                      ))}
+                    </div>
+                    {totalPages > 1 && (
+                      <div className="mt-8">
+                        <Pagination
+                          currentPage={page}
+                          totalPages={totalPages}
+                          baseUrl="/resources"
+                          searchParams={{ type, category: categorySlug }}
+                        />
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="text-center py-12 border border-dashed border-white/10 rounded-lg">
+                    <div className="h-16 w-16 rounded-2xl bg-slate-800/50 border border-white/10 flex items-center justify-center mb-4 mx-auto">
+                      <Package className="h-8 w-8 text-gray-500" />
+                    </div>
+                    <p className="text-gray-400">
+                      No resources found matching your criteria.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </section>
