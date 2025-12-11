@@ -30,8 +30,23 @@ export default function LoginPage() {
         password,
       });
       if (error) throw error;
-      router.push("/admin");
-      router.refresh();
+
+      // Get user role from endpoint
+      const authUser = await supabase.auth.getUser();
+      if (authUser.data.user) {
+        const roleResponse = await fetch(
+          `/api/users/role?userId=${authUser.data.user.id}`
+        );
+        if (roleResponse.ok) {
+          const { role } = await roleResponse.json();
+          // Route based on role
+          const redirectPath = role === "admin" ? "/admin" : "/";
+          router.push(redirectPath);
+          router.refresh();
+        } else {
+          throw new Error("Failed to fetch user role");
+        }
+      }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {

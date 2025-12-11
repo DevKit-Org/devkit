@@ -42,24 +42,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/users - Create a new user (admin only)
+// POST /api/users - Create a new user (public for sign-up, admin for creating other users)
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user: currentUser },
-    } = await supabase.auth.getUser();
-
-    if (!currentUser) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // Check if user is admin
-    const userRole = await getUserRole(currentUser.id);
-    if (userRole !== "admin") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
     const body = await request.json();
     const { email, password, role = "client" } = body;
 
@@ -74,6 +59,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Invalid role. Must be 'admin' or 'client'" },
         { status: 400 }
+      );
+    }
+
+    // Check if this is an admin creating a user (authenticated)
+    const supabase = await createClient();
+    const {
+      data: { user: currentUser },
+    } = await supabase.auth.getUser();
+
+    // If authenticated, verify admin role for non-client role creation
+    if (currentUser && role !== "client") {
+      const userRole = await getUserRole(currentUser.id);
+      if (userRole !== "admin") {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+    }
+
+    // Allow public sign-ups with client role only
+    if (!currentUser && role !== "client") {
+      return NextResponse.json(
+        { error: "Only authenticated admins can create non-client users" },
+        { status: 403 }
       );
     }
 
