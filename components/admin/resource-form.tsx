@@ -100,12 +100,14 @@ export function ResourceForm({ categories, resource }: ResourceFormProps) {
   }
 
   return (
-    <Card>
+    <Card className="border-white/10 bg-slate-900">
       <CardContent className="p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="title">Title *</Label>
+              <Label htmlFor="title" className="text-white">
+                Title *
+              </Label>
               <Input
                 id="title"
                 value={title}
@@ -114,33 +116,43 @@ export function ResourceForm({ categories, resource }: ResourceFormProps) {
                   if (!resource) setSlug(generateSlug(e.target.value));
                 }}
                 placeholder="Resource title"
+                className="border-white/10 bg-slate-800 text-white placeholder:text-gray-500"
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="slug">Slug</Label>
+              <Label htmlFor="slug" className="text-white">
+                Slug
+              </Label>
               <Input
                 id="slug"
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
                 placeholder="resource-slug"
+                className="border-white/10 bg-slate-800 text-white placeholder:text-gray-500"
               />
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="type">Type *</Label>
+              <Label htmlFor="type" className="text-white">
+                Type *
+              </Label>
               <Select
                 value={type}
                 onValueChange={(v) => setType(v as ResourceType)}
               >
-                <SelectTrigger>
+                <SelectTrigger className="border-white/10 bg-slate-800 text-white">
                   <SelectValue placeholder="Select type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="border-white/10 bg-slate-800">
                   {resourceTypes.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>
+                    <SelectItem
+                      key={t.value}
+                      value={t.value}
+                      className="text-white hover:bg-slate-700"
+                    >
                       {t.label}
                     </SelectItem>
                   ))}
@@ -148,14 +160,20 @@ export function ResourceForm({ categories, resource }: ResourceFormProps) {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category" className="text-white">
+                Category
+              </Label>
               <Select value={categoryId} onValueChange={setCategoryId}>
-                <SelectTrigger>
+                <SelectTrigger className="border-white/10 bg-slate-800 text-white">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="border-white/10 bg-slate-800">
                   {categories.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.id}>
+                    <SelectItem
+                      key={cat.id}
+                      value={cat.id}
+                      className="text-white hover:bg-slate-700"
+                    >
                       {cat.name}
                     </SelectItem>
                   ))}
@@ -165,35 +183,44 @@ export function ResourceForm({ categories, resource }: ResourceFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="url">URL *</Label>
+            <Label htmlFor="url" className="text-white">
+              URL *
+            </Label>
             <Input
               id="url"
               type="url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://example.com"
+              className="border-white/10 bg-slate-800 text-white placeholder:text-gray-500"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description" className="text-white">
+              Description
+            </Label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Brief description of the resource"
+              className="border-white/10 bg-slate-800 text-white placeholder:text-gray-500"
               rows={3}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="tags">Tags (comma-separated)</Label>
+            <Label htmlFor="tags" className="text-white">
+              Tags (comma-separated)
+            </Label>
             <Input
               id="tags"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
               placeholder="react, typescript, ui"
+              className="border-white/10 bg-slate-800 text-white placeholder:text-gray-500"
             />
           </div>
 
@@ -203,13 +230,19 @@ export function ResourceForm({ categories, resource }: ResourceFormProps) {
               checked={featured}
               onCheckedChange={setFeatured}
             />
-            <Label htmlFor="featured">Featured resource</Label>
+            <Label htmlFor="featured" className="text-white">
+              Featured resource
+            </Label>
           </div>
 
-          {error && <p className="text-sm text-destructive">{error}</p>}
+          {error && <p className="text-sm text-red-400">{error}</p>}
 
           <div className="flex gap-4">
-            <Button type="submit" disabled={isLoading}>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
               {isLoading
                 ? "Saving..."
                 : resource
@@ -218,7 +251,7 @@ export function ResourceForm({ categories, resource }: ResourceFormProps) {
             </Button>
             <Button
               type="button"
-              variant="outline"
+              variant="destructive"
               onClick={() => router.back()}
             >
               Cancel

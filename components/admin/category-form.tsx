@@ -173,9 +173,8 @@ export function CategoryForm({ category }: CategoryFormProps) {
             </Button>
             <Button
               type="button"
-              variant="outline"
+              variant="destructive"
               onClick={() => router.back()}
-              className="border-white/10 text-gray-200 hover:bg-slate-800"
             >
               Cancel
             </Button>
