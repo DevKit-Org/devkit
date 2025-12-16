@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Icons,
-  getCategoryIcon,
+  getCategoryIconDynamic,
   getResourceTypeIcon,
 } from "@/components/icons";
 import type { Resource } from "@/lib/types";
@@ -25,7 +25,7 @@ const typeColors: Record<string, string> = {
 
 export function ResourceCard({ resource }: ResourceCardProps) {
   const CategoryIcon = resource.category?.icon
-    ? getCategoryIcon(resource.category.icon)
+    ? getCategoryIconDynamic(resource.category.icon)
     : Icons.layers;
 
   const TypeIcon = getResourceTypeIcon(resource.type);
