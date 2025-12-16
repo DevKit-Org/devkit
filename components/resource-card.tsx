@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Icons, getCategoryIcon } from "@/components/icons";
+import {
+  Icons,
+  getCategoryIcon,
+  getResourceTypeIcon,
+} from "@/components/icons";
 import type { Resource } from "@/lib/types";
 import { ExternalLink, Star } from "lucide-react";
 
@@ -23,6 +27,13 @@ export function ResourceCard({ resource }: ResourceCardProps) {
   const CategoryIcon = resource.category?.icon
     ? getCategoryIcon(resource.category.icon)
     : Icons.layers;
+
+  const TypeIcon = getResourceTypeIcon(resource.type);
+
+  // Get color for type badge, default to slate for custom types
+  const typeColor =
+    typeColors[resource.type] ||
+    "bg-slate-500/20 text-slate-300 border border-slate-500/30";
 
   return (
     <div className="group relative h-full overflow-hidden rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 transition-all duration-300 hover:bg-white/10 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/20">
@@ -62,7 +73,10 @@ export function ResourceCard({ resource }: ResourceCardProps) {
 
         {/* Tags and Type Badge */}
         <div className="flex flex-wrap gap-2 mb-4">
-          <Badge className={`text-xs font-medium ${typeColors[resource.type]}`}>
+          <Badge
+            className={`text-xs font-medium flex items-center gap-1.5 ${typeColor}`}
+          >
+            <TypeIcon className="h-3 w-3" />
             {resource.type.replace("-", " ")}
           </Badge>
           {resource.tags.slice(0, 2).map((tag) => (

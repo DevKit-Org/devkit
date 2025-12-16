@@ -18,8 +18,9 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Category, Resource, ResourceType } from "@/lib/types";
+import { PREDEFINED_RESOURCE_TYPES } from "@/lib/types";
 
-const resourceTypes: { value: ResourceType; label: string }[] = [
+const resourceTypes: { value: string; label: string }[] = [
   { value: "api", label: "API" },
   { value: "template", label: "Template" },
   { value: "tool", label: "Tool" },
@@ -41,6 +42,14 @@ export function ResourceForm({ categories, resource }: ResourceFormProps) {
   const [title, setTitle] = useState(resource?.title || "");
   const [slug, setSlug] = useState(resource?.slug || "");
   const [type, setType] = useState<ResourceType>(resource?.type || "tool");
+  const [isCustomType, setIsCustomType] = useState(
+    resource ? !PREDEFINED_RESOURCE_TYPES.includes(resource.type as any) : false
+  );
+  const [customType, setCustomType] = useState(
+    resource && !PREDEFINED_RESOURCE_TYPES.includes(resource.type as any)
+      ? resource.type
+      : ""
+  );
   const [description, setDescription] = useState(resource?.description || "");
   const [url, setUrl] = useState(resource?.url || "");
   const [tags, setTags] = useState(resource?.tags.join(", ") || "");
@@ -59,10 +68,18 @@ export function ResourceForm({ categories, resource }: ResourceFormProps) {
     setIsLoading(true);
     setError(null);
 
+    const finalType = isCustomType ? customType : type;
+
+    if (!finalType) {
+      setError("Type is required");
+      setIsLoading(false);
+      return;
+    }
+
     const data = {
       title,
       slug: slug || generateSlug(title),
-      type,
+      type: finalType,
       description,
       url,
       tags: tags
@@ -139,25 +156,54 @@ export function ResourceForm({ categories, resource }: ResourceFormProps) {
               <Label htmlFor="type" className="text-white">
                 Type *
               </Label>
-              <Select
-                value={type}
-                onValueChange={(v) => setType(v as ResourceType)}
-              >
-                <SelectTrigger className="border-white/10 bg-slate-800 text-white">
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent className="border-white/10 bg-slate-800">
-                  {resourceTypes.map((t) => (
-                    <SelectItem
-                      key={t.value}
-                      value={t.value}
-                      className="text-white hover:bg-slate-700"
-                    >
-                      {t.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {!isCustomType ? (
+                <div className="space-y-2">
+                  <Select value={type} onValueChange={(v) => setType(v)}>
+                    <SelectTrigger className="border-white/10 bg-slate-800 text-white">
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent className="border-white/10 bg-slate-800">
+                      {resourceTypes.map((t) => (
+                        <SelectItem
+                          key={t.value}
+                          value={t.value}
+                          className="text-white hover:bg-slate-700"
+                        >
+                          {t.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <button
+                    type="button"
+                    onClick={() => setIsCustomType(true)}
+                    className="text-xs text-blue-400 hover:text-blue-300 underline"
+                  >
+                    or create custom type
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Input
+                    id="custom-type"
+                    value={customType}
+                    onChange={(e) => setCustomType(e.target.value)}
+                    placeholder="e.g., framework, plugin, database"
+                    className="border-white/10 bg-slate-800 text-white placeholder:text-gray-500"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsCustomType(false);
+                      setCustomType("");
+                    }}
+                    className="text-xs text-blue-400 hover:text-blue-300 underline"
+                  >
+                    or select predefined type
+                  </button>
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="category" className="text-white">
