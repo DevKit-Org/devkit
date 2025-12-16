@@ -47,7 +47,7 @@ export function CategoryForm({ category }: CategoryFormProps) {
   );
   const [customIcon, setCustomIcon] = useState(
     category && !iconOptions.some((opt) => opt.value === category.icon)
-      ? category.icon
+      ? category.icon || ""
       : ""
   );
 
