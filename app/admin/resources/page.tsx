@@ -12,15 +12,39 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/icons";
 import { DeleteResourceButton } from "@/components/admin/delete-resource-button";
+import { Pagination } from "@/components/pagination";
+import { AdminSearchForm } from "@/components/admin/admin-search-form";
 import type { Resource } from "@/lib/types";
 
-export default async function AdminResourcesPage() {
+const ITEMS_PER_PAGE = 10;
+
+export default async function AdminResourcesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; q?: string }>;
+}) {
+  const params = await searchParams;
+  const currentPage = Math.max(1, Number.parseInt(params.page || "1"));
+  const searchQuery = params.q || "";
+
   const supabase = await createClient();
 
-  const { data: resources } = await supabase
+  const from = (currentPage - 1) * ITEMS_PER_PAGE;
+  const to = from + ITEMS_PER_PAGE - 1;
+
+  let query = supabase
     .from("resources")
-    .select("*, category:categories(*)")
-    .order("created_at", { ascending: false });
+    .select("*, category:categories(*)", { count: "exact" });
+
+  if (searchQuery) {
+    query = query.ilike("title", `%${searchQuery}%`);
+  }
+
+  const { data: resources, count } = await query
+    .order("title", { ascending: true })
+    .range(from, to);
+
+  const totalPages = Math.ceil((count || 0) / ITEMS_PER_PAGE);
 
   return (
     <div className="space-y-6">
@@ -38,6 +62,11 @@ export default async function AdminResourcesPage() {
           </Link>
         </Button>
       </div>
+
+      <AdminSearchForm
+        initialQuery={searchQuery}
+        placeholder="Search resources by title..."
+      />
 
       <div className="rounded-lg border border-white/10 bg-slate-900">
         <Table>
@@ -111,6 +140,16 @@ export default async function AdminResourcesPage() {
           </TableBody>
         </Table>
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            baseUrl="/admin/resources"
+          />
+        </div>
+      )}
     </div>
   );
 }

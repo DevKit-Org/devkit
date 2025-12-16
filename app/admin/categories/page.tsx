@@ -11,15 +11,26 @@ import {
 } from "@/components/ui/table";
 import { Icons, getCategoryIcon } from "@/components/icons";
 import { DeleteCategoryButton } from "@/components/admin/delete-category-button";
+import { AdminSearchForm } from "@/components/admin/admin-search-form";
 import type { Category } from "@/lib/types";
 
-export default async function AdminCategoriesPage() {
+export default async function AdminCategoriesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const params = await searchParams;
+  const searchQuery = params.q || "";
+
   const supabase = await createClient();
 
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("*")
-    .order("name");
+  let query = supabase.from("categories").select("*");
+
+  if (searchQuery) {
+    query = query.ilike("name", `%${searchQuery}%`);
+  }
+
+  const { data: categories } = await query.order("name");
 
   return (
     <div className="space-y-6">
@@ -37,6 +48,11 @@ export default async function AdminCategoriesPage() {
           </Link>
         </Button>
       </div>
+
+      <AdminSearchForm
+        initialQuery={searchQuery}
+        placeholder="Search categories by name..."
+      />
 
       <div className="rounded-lg border border-white/10 bg-slate-900">
         <Table>
