@@ -4,9 +4,10 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import type { Category, ResourceType } from "@/lib/types";
+import type { Category } from "@/lib/types";
+import { PREDEFINED_RESOURCE_TYPES } from "@/lib/types";
 
-const resourceTypes: { value: ResourceType; label: string }[] = [
+const resourceTypes: { value: string; label: string }[] = [
   { value: "api", label: "APIs" },
   { value: "template", label: "Templates" },
   { value: "tool", label: "Tools" },

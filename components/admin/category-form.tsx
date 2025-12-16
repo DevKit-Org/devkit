@@ -40,6 +40,16 @@ export function CategoryForm({ category }: CategoryFormProps) {
   const [slug, setSlug] = useState(category?.slug || "");
   const [description, setDescription] = useState(category?.description || "");
   const [icon, setIcon] = useState(category?.icon || "");
+  const [isCustomIcon, setIsCustomIcon] = useState(
+    category && !iconOptions.some((opt) => opt.value === category.icon)
+      ? true
+      : false
+  );
+  const [customIcon, setCustomIcon] = useState(
+    category && !iconOptions.some((opt) => opt.value === category.icon)
+      ? category.icon || ""
+      : ""
+  );
 
   function generateSlug(text: string) {
     return text
@@ -53,11 +63,19 @@ export function CategoryForm({ category }: CategoryFormProps) {
     setIsLoading(true);
     setError(null);
 
+    const finalIcon = isCustomIcon ? customIcon : icon;
+
+    if (!finalIcon) {
+      setError("Icon is required");
+      setIsLoading(false);
+      return;
+    }
+
     const data = {
       name,
       slug: slug || generateSlug(name),
       description,
-      icon,
+      icon: finalIcon,
     };
 
     try {
@@ -125,22 +143,57 @@ export function CategoryForm({ category }: CategoryFormProps) {
             <Label htmlFor="icon" className="text-white">
               Icon
             </Label>
-            <Select value={icon} onValueChange={setIcon}>
-              <SelectTrigger className="border-white/10 bg-slate-800 text-white">
-                <SelectValue placeholder="Select an icon" />
-              </SelectTrigger>
-              <SelectContent className="border-white/10 bg-slate-800">
-                {iconOptions.map((opt) => (
-                  <SelectItem
-                    key={opt.value}
-                    value={opt.value}
-                    className="text-white hover:bg-slate-700"
-                  >
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {!isCustomIcon ? (
+              <div className="space-y-2">
+                <Select value={icon} onValueChange={setIcon}>
+                  <SelectTrigger className="border-white/10 bg-slate-800 text-white">
+                    <SelectValue placeholder="Select an icon" />
+                  </SelectTrigger>
+                  <SelectContent className="border-white/10 bg-slate-800">
+                    {iconOptions.map((opt) => (
+                      <SelectItem
+                        key={opt.value}
+                        value={opt.value}
+                        className="text-white hover:bg-slate-700"
+                      >
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <button
+                  type="button"
+                  onClick={() => setIsCustomIcon(true)}
+                  className="text-xs text-blue-400 hover:text-blue-300 underline"
+                >
+                  or enter custom lucide icon name
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Input
+                  id="custom-icon"
+                  value={customIcon}
+                  onChange={(e) => setCustomIcon(e.target.value)}
+                  placeholder="e.g., star, zap, database, code2"
+                  className="border-white/10 bg-slate-800 text-white placeholder:text-gray-500"
+                  required
+                />
+                <p className="text-xs text-gray-400">
+                  Enter a lucide icon name (see lucide.dev for available icons)
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsCustomIcon(false);
+                    setCustomIcon("");
+                  }}
+                  className="text-xs text-blue-400 hover:text-blue-300 underline"
+                >
+                  or select from predefined icons
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2">
