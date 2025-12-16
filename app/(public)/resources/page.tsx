@@ -62,8 +62,7 @@ export default async function ResourcesPage({ searchParams }: Props) {
   }
 
   const { data: resources, count } = await query
-    .order("featured", { ascending: false })
-    .order("created_at", { ascending: false })
+    .order("title", { ascending: true })
     .range(from, to);
 
   const totalPages = Math.ceil((count || 0) / limit);
