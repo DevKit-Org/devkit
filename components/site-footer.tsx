@@ -158,12 +158,24 @@ export function SiteFooter() {
           <p className="text-sm text-gray-500">
             &copy; {new Date().getFullYear()} DevKit. All rights reserved.
           </p>
-          <div className="flex items-center gap-6 text-sm text-gray-500">
-            <Link href="#" className="hover:text-white transition-colors">
+          <div className="flex items-center gap-6 text-sm text-gray-500 flex-wrap justify-center">
+            <Link
+              href="/privacy-policy"
+              className="hover:text-white transition-colors"
+            >
               Privacy Policy
             </Link>
-            <Link href="#" className="hover:text-white transition-colors">
+            <Link
+              href="/terms-of-service"
+              className="hover:text-white transition-colors"
+            >
               Terms of Service
+            </Link>
+            <Link
+              href="/cookies-policy"
+              className="hover:text-white transition-colors"
+            >
+              Cookies Policy
             </Link>
           </div>
         </div>

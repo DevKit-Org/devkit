@@ -1,10 +1,13 @@
-export type ResourceType =
-  | "api"
-  | "template"
-  | "tool"
-  | "ui-component"
-  | "tutorial"
-  | "library";
+export type ResourceType = string;
+
+export const PREDEFINED_RESOURCE_TYPES = [
+  "api",
+  "template",
+  "tool",
+  "ui-component",
+  "tutorial",
+  "library",
+] as const;
 
 export interface Category {
   id: string;

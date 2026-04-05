@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Icons } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import type { Category } from "@/lib/types";
@@ -60,21 +59,21 @@ export function ResourceFilters({
           variant="ghost"
           size="sm"
           onClick={clearFilters}
-          className="w-full justify-start"
+          className="w-full justify-start text-gray-400 hover:text-gray-200 hover:bg-slate-800/50"
         >
           <Icons.x className="mr-2 h-4 w-4" />
           Clear Filters
         </Button>
       )}
 
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
+      <div className="rounded-lg border border-white/10 bg-slate-800/30 backdrop-blur-sm overflow-hidden">
+        <div className="px-4 py-3 border-b border-white/10">
+          <h3 className="text-sm font-medium flex items-center gap-2 text-white">
             <Icons.filter className="h-4 w-4" />
             Type
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1">
+          </h3>
+        </div>
+        <div className="p-3 space-y-1">
           {resourceTypes.map((type) => (
             <button
               key={type.value}
@@ -87,24 +86,24 @@ export function ResourceFilters({
               className={cn(
                 "w-full text-left px-3 py-2 text-sm rounded-md transition-colors",
                 currentType === type.value
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-muted"
+                  ? "bg-blue-500/20 text-blue-300 border border-blue-400/30"
+                  : "text-gray-400 hover:bg-slate-700/30 hover:text-gray-300"
               )}
             >
               {type.label}
             </button>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
+      <div className="rounded-lg border border-white/10 bg-slate-800/30 backdrop-blur-sm overflow-hidden">
+        <div className="px-4 py-3 border-b border-white/10">
+          <h3 className="text-sm font-medium flex items-center gap-2 text-white">
             <Icons.tag className="h-4 w-4" />
             Category
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-1">
+          </h3>
+        </div>
+        <div className="p-3 space-y-1">
           {categories.map((category) => (
             <button
               key={category.id}
@@ -117,15 +116,15 @@ export function ResourceFilters({
               className={cn(
                 "w-full text-left px-3 py-2 text-sm rounded-md transition-colors",
                 currentCategory === category.slug
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-muted"
+                  ? "bg-blue-500/20 text-blue-300 border border-blue-400/30"
+                  : "text-gray-400 hover:bg-slate-700/30 hover:text-gray-300"
               )}
             >
               {category.name}
             </button>
           ))}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
